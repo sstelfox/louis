@@ -15,20 +15,21 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/sstelfox/louis'
   spec.license       = 'AGPL-3.0'
 
-  file_list = `git ls-files -z`.split("\x0")
-  file_list.delete('data/mac_oui_manuf.txt')
+  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
 
-  spec.files         = file_list
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'bundler', '~> 1.7'
-  spec.add_development_dependency 'coveralls', '0.7.0'
-  spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'bundler', '~> 2.0'
+  spec.add_development_dependency 'coveralls', '~> 0.8'
   spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rdoc'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'yard'
+  spec.add_development_dependency 'rspec', '~> 3.0'
+
+  spec.add_development_dependency 'pry', '~> 0.12'
+  spec.add_development_dependency 'rdoc', '~> 6.1'
+  spec.add_development_dependency 'simplecov', '~> 0.16'
+  spec.add_development_dependency 'yard', '~> 0.9'
 end
