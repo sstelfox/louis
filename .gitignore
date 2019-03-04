@@ -11,5 +11,6 @@
 *.so
 *.o
 *.a
+*.gem
 data/mac_oui_manuf.txt
 mkmf.log

@@ -34,22 +34,23 @@ module Louis
     masked_mac = numeric_mac & IGNORED_BITS_MASK
 
     vendor = search_table(masked_mac)
-    return {'long_vendor' => vendor['l'], 'short_vendor' => vendor['s']} if vendor
+    return {'long_vendor' => vendor['l'], 'short_vendor' => vendor['s']}.compact if vendor
 
     # Try again, but this time don't ignore any bits (Looking at you
     # Google... with your 'da' prefix...)
     vendor = search_table(numeric_mac)
-    return {'long_vendor' => vendor['l'], 'short_vendor' => vendor['s']} if vendor
+    return {'long_vendor' => vendor['l'], 'short_vendor' => vendor['s']}.compact if vendor
 
     {'long_vendor' => 'Unknown', 'short_vendor' => 'Unknown'}
   end
 
   def self.search_table(encoded_mac)
-    mask_keys.each{|mask|
+    mask_keys.each do |mask|
       table = LOOKUP_TABLE[mask.to_s]
       prefix = (encoded_mac & calculate_mask(nil, mask)).to_s
       return table[prefix] if table.include?(prefix)
-    }
+    end
+
     nil
   end
 end

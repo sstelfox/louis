@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Library for looking up the the vendor associated with a MAC address.}
   spec.description   = %q{There is a public registry maintained by the IANA that is required to be used by all vendors operating in certains spaces. Ethernet, Bluetooth, and Wireless device manufacturers are all assigned unique prefixes. This database is available publicly online and can be used to identify the manufacturer of these devices. This library provides an easy mechanism to perform these lookups.}
   spec.homepage      = 'https://github.com/sstelfox/louis'
-  spec.license       = 'AGPLv3'
+  spec.license       = 'AGPL-3.0'
 
   file_list = `git ls-files -z`.split("\x0")
   file_list.delete('data/mac_oui_manuf.txt')

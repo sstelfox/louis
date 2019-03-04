@@ -10,7 +10,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   Coveralls::SimpleCov::Formatter
 ]
 
-SimpleCov.add_filter "/spec/"
+SimpleCov.add_filter '/spec/'
 SimpleCov.add_filter do |source_file|
   source_file.lines.count < 3
 end
