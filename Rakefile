@@ -34,7 +34,7 @@ task :parse_data_file => [:environment] do
     lookup_table[res['mask']][res['prefix'].to_s] = {
       's' => res['short_vendor'],
       'l' => res['long_vendor']
-    }
+    }.compact
   end
 
   File.write(Louis::PARSED_DATA_FILE, JSON.generate(lookup_table))

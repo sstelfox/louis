@@ -5,30 +5,30 @@ RSpec.describe Louis do
     expect(Louis::VERSION).not_to be nil
   end
 
-  it "it should have its source data file" do
+  it 'it should have its source data file' do
     expect(File.readable?(Louis::ORIGINAL_OUI_FILE)).to be(true)
   end
 
-  it "it should have its parsed data file" do
+  it 'it should have its parsed data file' do
     expect(File.readable?(Louis::PARSED_DATA_FILE)).to be(true)
   end
 
   describe 'Original OUI format regex' do
     subject { Louis::OUI_FORMAT_REGEX }
 
-    it "should ignore comment lines" do
-      comment_line = "# This is just a sample of what a comment might look like"
+    it 'should ignore comment lines' do
+      comment_line = '# This is just a sample of what a comment might look like'
       expect(subject).to_not match(comment_line)
     end
 
-    it "should ignore blank lines" do
-      expect(subject).to_not match("")
+    it 'should ignore blank lines' do
+      expect(subject).to_not match('')
     end
   end
 
   # The core of the whole library
   describe '#lookup' do
-    let(:base_mac) { '00:12:34:00:00:00' }
+    let(:base_mac) { '08:94:ef:00:00:00' }
     let(:partial_mac) { '3c:97:0e' }
     let(:unknown_mac) { 'c5:00:00:00:00:00' }
     let(:local_mac)     { '3e:97:0e' }
@@ -53,7 +53,9 @@ RSpec.describe Louis do
       expect(Louis.lookup(base_mac)['long_vendor']).to eq('Camille Bauer')
     end
 
-    it 'should be able to identify the short vendor of a partial MAC' do
+    it 'should be able to identify the short vendor of a partial MAC', :focus do
+      puts partial_mac
+      puts Louis.lookup(partial_mac).inspect
       expect(Louis.lookup(partial_mac)['short_vendor']).to eq('WistronI')
     end
 
@@ -84,8 +86,8 @@ RSpec.describe Louis do
   end
 
   # For future reference, these may change and are depedent on the
-  # specifications in the data file. This of these as the slash-suffixes that
-  # describe a network /24 for example.
+  # specifications in the data file. These are the slash-suffixes that describe
+  # a the relevant bits in the prefix /24 for example.
   describe '#mask_keys' do
     it 'should return a list of integers: [36, 28, 24]' do
       expect(Louis.mask_keys).to eq([36, 28, 24])
