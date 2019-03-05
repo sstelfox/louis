@@ -18,7 +18,7 @@ module Louis
     # @param [String] mac
     # @return [String]
     def self.clean_mac(mac)
-      mac.tr(':-', '')
+      mac.tr(':\.-', '')
     end
 
     # Count the number of bits set in an integer. This likely could use an

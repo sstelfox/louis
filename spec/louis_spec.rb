@@ -113,6 +113,10 @@ RSpec.describe(Louis::Helpers) do
       expect(described_class.clean_mac('ca-fe-de-ad-be-ef')).to eq('cafedeadbeef')
     end
 
+    it 'should remove periods' do
+      expect(described_class.clean_mac('00.00.00.00.00.00')).to eq('000000000000')
+    end
+
     it 'should otherwise leave the mac alone' do
       expect(described_class.clean_mac('001122334455')).to eq('001122334455')
     end
