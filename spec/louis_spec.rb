@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Louis do
+RSpec.describe(Louis) do
   it 'has a version number' do
     expect(Louis::VERSION).not_to be nil
   end
@@ -53,9 +53,7 @@ RSpec.describe Louis do
       expect(Louis.lookup(base_mac)['long_vendor']).to eq('Camille Bauer')
     end
 
-    it 'should be able to identify the short vendor of a partial MAC', :focus do
-      puts partial_mac
-      puts Louis.lookup(partial_mac).inspect
+    it 'should be able to identify the short vendor of a partial MAC' do
       expect(Louis.lookup(partial_mac)['short_vendor']).to eq('WistronI')
     end
 
@@ -91,6 +89,81 @@ RSpec.describe Louis do
   describe '#mask_keys' do
     it 'should return a list of integers: [36, 28, 24]' do
       expect(Louis.mask_keys).to eq([36, 28, 24])
+    end
+  end
+end
+
+RSpec.describe(Louis::Helpers) do
+  context '#calculate_mask', :focus do
+    it 'should prefer the provided mask if one is provided' do
+      expect(described_class.calculate_mask('23:45:10', 16)).to eq(0xffff_0000_0000)
+    end
+
+    it 'should calculate a bitmask covering the relevant bytes for a provided mac' do
+      expect(described_class.calculate_mask('1', nil)).to eq(0xf000_0000_0000)
+    end
+  end
+
+  context '#clean_mac' do
+    it 'should remove colons' do
+      expect(described_class.clean_mac('12:34:56:78:9a:bc')).to eq('123456789abc')
+    end
+
+    it 'should remove hyphens' do
+      expect(described_class.clean_mac('ca-fe-de-ad-be-ef')).to eq('cafedeadbeef')
+    end
+
+    it 'should otherwise leave the mac alone' do
+      expect(described_class.clean_mac('001122334455')).to eq('001122334455')
+    end
+  end
+
+  context '#count_bits' do
+    it 'should return the number of set bits in a given number' do
+      expect(described_class.count_bits(0b0000_0000)).to eq(0)
+      expect(described_class.count_bits(0b0001_1101)).to eq(4)
+      expect(described_class.count_bits(0b0101_0101_1111_0000_1100_0011)).to eq(12)
+    end
+  end
+
+  context '#mac_to_num' do
+    it 'should convert the hex representation to an integer' do
+      raw_number = 0b11111111_00000000_11111111_00000000_11111111_00000000
+      hex_version = raw_number.to_s(16)
+      expect(described_class.mac_to_num(hex_version)).to eq(raw_number)
+    end
+
+    it 'should left adjust partial MACs before converting to an integer' do
+      partial_number = 0b10101010_10101010_10101010.to_s(16)
+      full_number = 0b10101010_10101010_10101010_00000000_00000000_00000000
+      expect(described_class.mac_to_num(partial_number)).to eq(full_number)
+    end
+  end
+
+  context '#line_parser' do
+    it 'should ignore comments' do
+      expect(described_class.line_parser('# something something comment')).to eq(nil)
+    end
+
+    it 'should ignore empty lines' do
+      expect(described_class.line_parser('')).to eq(nil)
+    end
+
+    it 'should handle partial mac prefixes' do
+      expect(described_class.line_parser('00:00:10		Sytek	Sytek Inc.')).to eq({
+        'mask' => 24,
+        'prefix' => 0x0000_1000_0000,
+        'long_vendor' => 'Sytek Inc.',
+        'short_vendor' => 'Sytek'
+      })
+    end
+
+    it 'should handle lines with no long name' do
+      expect(described_class.line_parser('00:00:17:00:00:00	Oracle')).to eq({
+        'mask' => 48,
+        'prefix' => 0x000017000000,
+        'short_vendor' => 'Oracle'
+      })
     end
   end
 end

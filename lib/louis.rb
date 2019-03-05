@@ -5,8 +5,6 @@ require 'louis/helpers'
 require 'louis/version'
 
 module Louis
-  extend Helpers
-
   # This masks out both the 'universal/local' bit as well as the
   # 'unicast/multicast' bit which is the first and second least significant bit
   # of the first byte in a vendor prefix.
@@ -30,7 +28,7 @@ module Louis
   # @param [String] mac
   # @return [String]
   def self.lookup(mac)
-    numeric_mac = mac_to_num(mac)
+    numeric_mac = Louis::Helpers.mac_to_num(mac)
     masked_mac = numeric_mac & IGNORED_BITS_MASK
 
     vendor = search_table(masked_mac)
@@ -47,7 +45,7 @@ module Louis
   def self.search_table(encoded_mac)
     mask_keys.each do |mask|
       table = LOOKUP_TABLE[mask.to_s]
-      prefix = (encoded_mac & calculate_mask(nil, mask)).to_s
+      prefix = (encoded_mac & Louis::Helpers.calculate_mask(nil, mask)).to_s
       return table[prefix] if table.include?(prefix)
     end
 

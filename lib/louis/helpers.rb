@@ -7,7 +7,7 @@ module Louis
     # @param [String] prefix
     # @param [String] mask
     # @return [Fixnum]
-    def calculate_mask(prefix, mask)
+    def self.calculate_mask(prefix, mask)
       mask_base = mask.nil? ? (clean_mac(prefix).length * 4) : mask.to_i
       (2 ** 48 - 1) - (2 ** (48 - mask_base) - 1)
     end
@@ -17,15 +17,16 @@ module Louis
     #
     # @param [String] mac
     # @return [String]
-    def clean_mac(mac)
+    def self.clean_mac(mac)
       mac.tr(':-', '')
     end
 
-    # Count the number of bits set in an integer.
+    # Count the number of bits set in an integer. This likely could use an
+    # improved algorithm but this is fast and effective enough.
     #
     # @param [Fixnum] num
     # @return [Fixnum]
-    def count_bits(num)
+    def self.count_bits(num)
       num.to_s(2).count('1')
     end
 
@@ -33,7 +34,7 @@ module Louis
     # into it's integer representation.
     #
     # @param [String] mac
-    def mac_to_num(mac)
+    def self.mac_to_num(mac)
       clean_mac(mac).ljust(12, '0').to_i(16)
     end
 
@@ -43,7 +44,7 @@ module Louis
     #
     # @param [String]
     # @return [Hash<String=>Object>]
-    def line_parser(line)
+    def self.line_parser(line)
       return unless (matches = OUI_FORMAT_REGEX.match(line))
       result = Hash[matches.names.zip(matches.captures)]
 
@@ -55,7 +56,7 @@ module Louis
         'prefix'       => prefix,
         'long_vendor'  => result['long_vendor'],
         'short_vendor' => result['short_vendor']
-      }
+      }.compact
     end
   end
 end
