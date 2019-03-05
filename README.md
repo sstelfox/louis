@@ -1,10 +1,9 @@
 # Louis
 
 [![Gem Version](https://badge.fury.io/rb/louis.svg)](http://badge.fury.io/rb/louis)
-[![Build Status](https://travis-ci.org/pwnieexpress/louis.svg?branch=master)](https://travis-ci.org/pwnieexpress/louis)
-[![Coverage Status](https://coveralls.io/repos/pwnieexpress/louis/badge.svg?branch=master)](https://coveralls.io/r/pwnieexpress/louis?branch=master)
-[![Dependency Status](https://gemnasium.com/pwnieexpress/louis.svg)](https://gemnasium.com/pwnieexpress/louis)
-[![Code Climate](https://codeclimate.com/github/pwnieexpress/louis/badges/gpa.svg)](https://codeclimate.com/github/pwnieexpress/louis)
+[![Build Status](https://travis-ci.org/sstelfox/louis.svg?branch=master)](https://travis-ci.org/sstelfox/louis)
+[![Coverage Status](https://coveralls.io/repos/sstelfox/louis/badge.svg?branch=master)](https://coveralls.io/r/sstelfox/louis?branch=master)
+[![Code Climate](https://codeclimate.com/github/sstelfox/louis/badges/gpa.svg)](https://codeclimate.com/github/sstelfox/louis)
 
 There is a public registry maintained by the IANA that is required to be used
 by all vendors operating in certains spaces. Ethernet, Bluetooth, and Wireless
