@@ -5,10 +5,6 @@ RSpec.describe(Louis) do
     expect(Louis::VERSION).not_to be nil
   end
 
-  it 'it should have its source data file' do
-    expect(File.readable?(Louis::ORIGINAL_OUI_FILE)).to be(true)
-  end
-
   it 'it should have its parsed data file' do
     expect(File.readable?(Louis::PARSED_DATA_FILE)).to be(true)
   end
