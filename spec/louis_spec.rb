@@ -46,11 +46,11 @@ RSpec.describe(Louis) do
     end
 
     it 'should be able to identify the short vendor of a full MAC' do
-      expect(Louis.lookup(base_mac)['short_vendor']).to eq('CamilleB')
+      expect(Louis.lookup(base_mac)['short_vendor']).to eq('WistronI')
     end
 
     it 'should be able to identify the long vendor of a full MAC' do
-      expect(Louis.lookup(base_mac)['long_vendor']).to eq('Camille Bauer')
+      expect(Louis.lookup(base_mac)['long_vendor']).to eq('Wistron Infocomm (Zhongshan) Corporation')
     end
 
     it 'should be able to identify the short vendor of a partial MAC' do
