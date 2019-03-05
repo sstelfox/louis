@@ -8,7 +8,7 @@ rescue LoadError
   # no rspec available
 end
 
-desc "Download the latest copy of the wireshark manufacturer's database"
+desc 'Download the latest copy of the wireshark manufacturers database'
 task :update_wireshark => [:environment] do
   require 'net/http'
 
@@ -21,14 +21,12 @@ task :update_wireshark => [:environment] do
   end
 end
 
-desc "Pre-parse the source file into the parsed file"
+desc 'Pre-parse the source file into the parsed file'
 task :parse_data_file => [:environment] do
-  include Louis::Helpers
-
   lookup_table = {}
 
   File.open(Louis::ORIGINAL_OUI_FILE).each_line do |line|
-    next unless (res = line_parser(line))
+    next unless (res = Louis::Helpers.line_parser(line))
 
     lookup_table[res['mask']] ||= {}
     lookup_table[res['mask']][res['prefix'].to_s] = {
@@ -47,7 +45,7 @@ task :environment do
   require 'louis'
 end
 
-desc "Start a pry session with the code loaded"
+desc 'Start a pry session with the code loaded'
 task :console => [:environment] do
   require 'pry'
   pry
