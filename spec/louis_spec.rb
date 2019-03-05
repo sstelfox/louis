@@ -94,7 +94,7 @@ RSpec.describe(Louis) do
 end
 
 RSpec.describe(Louis::Helpers) do
-  context '#calculate_mask', :focus do
+  context '#calculate_mask' do
     it 'should prefer the provided mask if one is provided' do
       expect(described_class.calculate_mask('23:45:10', 16)).to eq(0xffff_0000_0000)
     end
