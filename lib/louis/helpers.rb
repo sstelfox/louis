@@ -56,7 +56,7 @@ module Louis
         'prefix'       => prefix,
         'long_vendor'  => result['long_vendor'],
         'short_vendor' => result['short_vendor']
-      }.compact
+      }.reject { |_, v| v.nil? }
     end
   end
 end

@@ -31,13 +31,21 @@ module Louis
     numeric_mac = Louis::Helpers.mac_to_num(mac)
     masked_mac = numeric_mac & IGNORED_BITS_MASK
 
-    vendor = search_table(masked_mac)
-    return {'long_vendor' => vendor['l'], 'short_vendor' => vendor['s']}.compact if vendor
+    if (vendor = search_table(masked_mac))
+      return {
+        'long_vendor' => vendor['l'],
+        'short_vendor' => vendor['s']
+      }.reject { |_, v| v.nil? }
+    end
 
     # Try again, but this time don't ignore any bits (Looking at you
     # Google... with your 'da' prefix...)
-    vendor = search_table(numeric_mac)
-    return {'long_vendor' => vendor['l'], 'short_vendor' => vendor['s']}.compact if vendor
+    if (vendor = search_table(numeric_mac))
+      return {
+        'long_vendor' => vendor['l'],
+        'short_vendor' => vendor['s']
+      }.reject { |_, v| v.nil? }
+    end
 
     {'long_vendor' => 'Unknown', 'short_vendor' => 'Unknown'}
   end
