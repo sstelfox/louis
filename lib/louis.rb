@@ -35,7 +35,7 @@ module Louis
       return {
         'long_vendor' => vendor['l'],
         'short_vendor' => vendor['s']
-      }.reject { |_, v| v.nil? }
+      }.compact
     end
 
     # Try again, but this time don't ignore any bits (Looking at you
@@ -44,7 +44,7 @@ module Louis
       return {
         'long_vendor' => vendor['l'],
         'short_vendor' => vendor['s']
-      }.reject { |_, v| v.nil? }
+      }.compact
     end
 
     {'long_vendor' => 'Unknown', 'short_vendor' => 'Unknown'}
