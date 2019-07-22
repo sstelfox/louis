@@ -29,6 +29,7 @@ RSpec.describe(Louis) do
     let(:unknown_mac) { 'c5:00:00:00:00:00' }
     let(:local_mac)     { '3e:97:0e' }
     let(:multicast_mac) { '3d:97:0e' }
+    let(:ieee_screw_up_mac) { 'da:a1:19' }
     let(:multi_match_mac) { 'E4:95:6E:40:00:00'}
     let(:most_specific_match) { 'Guang Lian Zhi Tong Technology Limited'}
     let(:least_specific_match) { 'IEEE Registration Authority'}
@@ -63,6 +64,10 @@ RSpec.describe(Louis) do
 
     it 'should drop the multicast bit when performing a lookup' do
       expect(Louis.lookup(multicast_mac)['short_vendor']).to eq('WistronI')
+    end
+
+    it 'should query unmasked when no matches occur (due to IEEE addresses assigning prefixes with those bits set)' do
+      expect(Louis.lookup(ieee_screw_up_mac)['short_vendor']).to eq('Google')
     end
 
     it 'should return "Unknown" as the short vendor string for unknown MAC prefixes' do
