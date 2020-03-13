@@ -13,7 +13,7 @@ task :update_wireshark => [:environment] do
   require 'net/http'
 
   begin
-    new_file = Net::HTTP.get(URI('https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob_plain;f=manuf'))
+    new_file = Net::HTTP.get(URI('https://gitlab.com/wireshark/wireshark/raw/master/manuf'))
     File.write(Louis::ORIGINAL_OUI_FILE, new_file)
     puts 'Update complete'
   rescue => err
