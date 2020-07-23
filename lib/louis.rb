@@ -10,9 +10,16 @@ module Louis
   # of the first byte in a vendor prefix.
   IGNORED_BITS_MASK = 0xfcffffffffff
 
+  # Flag to indicate that this address is generated versus one assigned by a
+  # manufacturer.
+  LOCALLY_ADMINISTERED_BIT = 0x020000000000
+
   # Loads the lookup table, parsing out the uncommented non-blank lines into
   # objects we can compare MACs against to find their vendor.
   LOOKUP_TABLE = JSON.parse(File.read(Louis::PARSED_DATA_FILE))
+
+  # Bit flag indicating that the address is directed at more than one recipient.
+  MULTICAST_BIT = 0x010000000000
 
   # Collect the recorded mask and order it appropriately from most specific to
   # least.
@@ -31,10 +38,15 @@ module Louis
     numeric_mac = Louis::Helpers.mac_to_num(mac)
     masked_mac = numeric_mac & IGNORED_BITS_MASK
 
+    address_flags = []
+    address_flags << (numeric_mac & MULTICAST_BIT > 0 ? :multicast : :unicast)
+    address_flags << (numeric_mac & LOCALLY_ADMINISTERED_BIT > 0 ? :locally_generated : :manufacturer_generated)
+
     if (vendor = search_table(masked_mac))
       return {
+        'flags' => address_flags,
         'long_vendor' => vendor['l'],
-        'short_vendor' => vendor['s']
+        'short_vendor' => vendor['s'],
       }.compact
     end
 
@@ -42,12 +54,13 @@ module Louis
     # Google... with your 'da' prefix...)
     if (vendor = search_table(numeric_mac))
       return {
+        'flags' => address_flags,
         'long_vendor' => vendor['l'],
-        'short_vendor' => vendor['s']
+        'short_vendor' => vendor['s'],
       }.compact
     end
 
-    {'long_vendor' => 'Unknown', 'short_vendor' => 'Unknown'}
+    {'flags' => address_flags, 'long_vendor' => 'Unknown', 'short_vendor' => 'Unknown'}
   end
 
   def self.search_table(encoded_mac)

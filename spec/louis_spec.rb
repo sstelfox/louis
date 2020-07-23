@@ -39,7 +39,7 @@ RSpec.describe(Louis) do
     end
 
     it 'should have both the long vendor and short vendor' do
-      expect(Louis.lookup(base_mac).keys).to eq(['long_vendor', 'short_vendor'])
+      expect(Louis.lookup(base_mac).keys).to eq(['flags', 'long_vendor', 'short_vendor'])
     end
 
     it 'should be able to identify the short vendor of a full MAC' do
@@ -47,7 +47,10 @@ RSpec.describe(Louis) do
     end
 
     it 'should be able to identify the long vendor of a full MAC' do
-      expect(Louis.lookup(base_mac)['long_vendor']).to eq('Wistron Infocomm (Zhongshan) Corporation')
+      result = Louis.lookup(base_mac)
+
+      expect(result['flags']).to eq([:unicast, :manufacturer_generated])
+      expect(result['long_vendor']).to eq('Wistron Infocomm (Zhongshan) Corporation')
     end
 
     it 'should be able to identify the short vendor of a partial MAC' do
@@ -59,11 +62,17 @@ RSpec.describe(Louis) do
     end
 
     it 'should drop the local bit when performing a lookup' do
-      expect(Louis.lookup(local_mac)['short_vendor']).to eq('WistronI')
+      result = Louis.lookup(local_mac)
+
+      expect(result['flags']).to eq([:unicast, :locally_generated])
+      expect(result['short_vendor']).to eq('WistronI')
     end
 
     it 'should drop the multicast bit when performing a lookup' do
-      expect(Louis.lookup(multicast_mac)['short_vendor']).to eq('WistronI')
+      result = Louis.lookup(multicast_mac)
+
+      expect(result['flags']).to eq([:multicast, :manufacturer_generated])
+      expect(result['short_vendor']).to eq('WistronI')
     end
 
     it 'should query unmasked when no matches occur (due to IEEE addresses assigning prefixes with those bits set)' do
