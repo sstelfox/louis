@@ -38,6 +38,9 @@ task :parse_data_file => [:environment] do
   File.write(Louis::PARSED_DATA_FILE, JSON.generate(lookup_table))
 end
 
+desc 'Do a full data update'
+task :update => [:update_wireshark, :parse_data_file]
+
 task :environment do
   base_path = File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
   $LOAD_PATH.unshift(base_path) unless $LOAD_PATH.include?(base_path)
